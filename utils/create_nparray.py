@@ -1,3 +1,7 @@
+"""
+Preprocessing for converting raw images to npy files with labels.
+"""
+
 import os
 import sys
 import cv2
@@ -29,10 +33,12 @@ def img_to_nparray(imgdir):
         data, label: numpy array of the data, and another of the respective labels
     """
 
+    # get number of files in the directory
     num_files = sum([len(files) for _, _, files in os.walk(imgdir)])
 
     data = np.zeros([num_files, 28, 28, 1])
     label = np.zeros([num_files])
+
     dirlist = [x[0] for x in os.walk(imgdir)]
     dirlist = dirlist[1:len(dirlist)]
     k = 0 # per image 
