@@ -2,4 +2,4 @@
 *.swp
 *.pyc
 /.venv
-/__pycache__*.pyc
+/__pycache__
