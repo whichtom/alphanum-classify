@@ -2,3 +2,4 @@ opencv-python
 keras
 tensorflow==1.15.2
 numpy
+scikit-learn
