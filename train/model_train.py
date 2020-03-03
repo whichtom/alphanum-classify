@@ -17,7 +17,7 @@ import argparse
 
 # classes of each output
 classes = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-            "A", "B", "C", "D", "E", "F", "G", "E", "H", "I",
+            "A", "B", "C", "D", "E", "F", "G", "H", "I",
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
             "T", "U", "V", "W", "X", "Y", "Z"]
 
@@ -25,10 +25,13 @@ WIDTH = 28
 HEIGHT = 28
 NUM_CLASSES = 36
 
+# training data
 train_data = np.load("../data/tensors/train_data.npy")
 train_labels = np.load("../data/tensors/train_labels.npy")
+# validation data
 valid_data = np.load("../data/tensors/valid_data.npy")
 valid_labels = np.load("../data/tensors/valid_labels.npy")
+# final testing data
 test_data = np.load("../data/tensors/test_data.npy")
 test_labels = np.load("../data/tensors/test_labels.npy")
 
@@ -85,7 +88,7 @@ if __name__ == "__main__":
         print("Fitting model...")
         history = model.fit(train_data, train_labels,
                   validation_data=(valid_data, valid_labels),
-                  epochs=12, batch_size=32, verbose=1)
+                  epochs=16, batch_size=32, verbose=1)
 
         predictions = [np.argmax(model.predict(np.expand_dims(tensor,
                                                 axis=0))) for tensor in test_data]
