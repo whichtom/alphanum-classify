@@ -32,14 +32,14 @@ EPOCHS=8
 BATCH_SIZE=32
 
 # training data
-train_data = np.load("../data/tensors/train_data.npy")
-train_labels = np.load("../data/tensors/train_labels.npy")
+train_data = np.load("../data/nparr/train_data.npy")
+train_labels = np.load("../data/nparr/train_labels.npy")
 # validation data
-valid_data = np.load("../data/tensors/valid_data.npy")
-valid_labels = np.load("../data/tensors/valid_labels.npy")
+valid_data = np.load("../data/nparr/valid_data.npy")
+valid_labels = np.load("../data/nparr/valid_labels.npy")
 # final testing data
-test_data = np.load("../data/tensors/test_data.npy")
-test_labels = np.load("../data/tensors/test_labels.npy")
+test_data = np.load("../data/nparr/test_data.npy")
+test_labels = np.load("../data/nparr/test_labels.npy")
 
 train_labels = to_categorical(train_labels)
 valid_labels = to_categorical(valid_labels)
