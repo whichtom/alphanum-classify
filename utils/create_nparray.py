@@ -59,7 +59,7 @@ def img_to_nparray(imgdir):
         num_files = 545
 
     data = np.zeros([num_files, 28, 28, 1])
-    label = np.empty([num_files], dtype=str)
+    label = np.zeros([num_files])
 
     dirlist = [x[0] for x in os.walk(imgdir)]
     dirlist = dirlist[1:len(dirlist)]
@@ -74,13 +74,8 @@ def img_to_nparray(imgdir):
             img = img_to_array(img)
             data[k, :, :, :] = img
             data[k, :, :, :] = (data[k, :, :, :]/255.0)
-            label[k] = CLASSES[int(p)]
-            print(label[k])
+            label[k] = int(p)
             k = k+1 # iterates per image in the subdirectory in imgdir
         p = p+1 # iterates per subdirectory in imgdir
 
     return data, label
-
-
-if __name__=="__main__":
-    img_to_nparray("../data/raw/training_data")
