@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # sum amount of files in the directory
 
 cd $1

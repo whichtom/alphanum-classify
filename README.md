@@ -8,13 +8,15 @@ atm just does image recognition for a dataset of alphanumeric characters.
 
 ### Building npy dataset from raw
 
-For example (preferred)
-
+```bash
+$ ./rawtonpy.sh
 ```
-$ python3 save_nparray.py ../data/raw/ ../data/nparr/
+Will run the python script `save_nparray.py`, converting raw images to .npy files with labels. If you want to overwrite current files already present in the `/data/nparr/` directory simply
+```bash
+$ ./rawtonpy.sh overwrite
 ```
 
-Where `../data/raw/` is the directory for the raw images, and `../data/nparr/` is the target directory of the npy files. This script loads the raw images, and uses the `create_nparray.py` scriptto process the raw data and generate labels, saving into designated variables as shown below in the excerpt from `save_nparray.py`.
+Where `/data/raw/` is the directory for the raw images, and `/data/nparr/` is the target directory of the npy files. This script loads the raw images, and uses the `create_nparray.py` scriptto process the raw data and generate labels, saving into designated variables as shown below in the excerpt from `save_nparray.py`.
 
 ```python
 train_data, train_labels = img_to_nparray(sys.argv[1] + "/training_data")
