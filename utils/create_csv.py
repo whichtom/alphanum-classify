@@ -9,13 +9,6 @@ import numpy as np
 import csv
 import re
 import glob
-#from keras.preprocessing.image import img_to_array
-
-CLASSES = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-            "A", "B", "C", "D", "E", "F", "G", "H", "I",
-            "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
-            "T", "U", "V", "W", "X", "Y", "Z"]
-
 
 def atoi(text):
     return int(text) if text.isdigit() else text
@@ -70,7 +63,7 @@ def img_to_csv(imgdir):
     elif imgdir == "../data/raw/validation_data":
         num_files = 545
 
-    data = np.zeros([num_files, 785]) # 28 x 28 + 1
+    data = np.zeros([num_files, 784]) # 28 x 28
     label = np.zeros([num_files])
 
     dirlist = get_subdir(imgdir)
@@ -82,16 +75,12 @@ def img_to_csv(imgdir):
         for j in imgs:
             # individual img is j
             # individual label is generated for said img
-            j = j.flatten()
-            j = j.astype(int)
-            data[k, 0:len(j)] = j
-            data[k, len(j)] = int(p)
+            j = j.flatten() # (28,28) -> (784,)
+            j = j.astype(int) # no long boiz
+            data[k, :] = j
+            #data[k, len(j)] = int(p) # last column is index
             label[k] = int(p)
             k = k+1
         p = p+1
 
     return data, label
-
-if __name__=="__main__":
-    test_data, test_label = img_to_csv("../data/raw/test_data")
-    np.savetxt("test.csv", test_data, delimiter=",", fmt="%d")
