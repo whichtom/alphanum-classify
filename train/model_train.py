@@ -172,6 +172,8 @@ if __name__ == "__main__":
         model.compile(loss="categorical_crossentropy",
                     optimizer="Adam", metrics=["accuracy"])
 
+        model.summary()
+
         # training
         print("Fitting model...")
         model.fit(train_data, train_labels,
