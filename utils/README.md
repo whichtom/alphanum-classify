@@ -18,9 +18,9 @@
 
 ## misc
 
-`search.sh` finds the sum of the files in a directory. Specifically, for checking whether the number of labels produced matches the number of images present.
+`search.sh <directory>` finds the sum of the files in a directory. Specifically, for checking whether the number of labels produced matches the number of images present.
 
-* for `training_data/`: 6286 images
+* for `training_data/`, `./search.sh ../data/raw/training_data`: 6286 images
 * for `test_data/`: 360 images
 * for `valiation_data/`: 545 images
 
