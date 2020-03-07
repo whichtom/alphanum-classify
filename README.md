@@ -6,31 +6,55 @@ atm just does image recognition for a dataset of alphanumeric characters.
 
 ## Usage
 
-### Building npy dataset from raw
+### Building csv dataset from raw
 
-For example (preferred)
-
+```bash
+$ ./rawtocsv.sh
 ```
-$ python3 save_nparray.py ../data/raw/ ../data/nparr/
-```
-
-Where `../data/raw/` is the directory for the raw images, and `../data/nparr/` is the target directory of the npy files. This script loads the raw images, and uses the `create_nparray.py` scriptto process the raw data and generate labels, saving into designated variables as shown below in the excerpt from `save_nparray.py`.
-
-```python
-train_data, train_labels = img_to_nparray(sys.argv[1] + "/training_data")
-valid_data, valid_labels = img_to_nparray(sys.argv[1] + "/validation_data")
-test_data, test_labels = img_to_nparray(sys.argv[1] + "/test_data")
+Will run the python script `save_csv.py`, converting raw images to .csv with an accompanied .csv for labels. If you want to overwrite current files already present in the `/data/csv` directory simply
+```bash
+$ ./rawtocsv.sh overwrite
 ```
 
-The `create_nparray.py` script assigns labels from knowledge of how the raw data is stored. In the directory `data/raw/` there are three subdirectories, `/training_data/`, `/validation_data/`, and `/test_data/`. Within each of these are separate folders for each alphanumeric character (0-9, A-Z). The script walks through the directories, applies `cv2.COLOR_BGR2GRAY`, `keras.preprocessing.image.img_to_array`, normalizes between 0 and 1, and then assigns labels depending on an iterator. This iterator is used as a index for a CLASSES list, producing type `str` values for labels.
+Where `/data/raw/` is the directory for the raw images, and `/data/csv/` is the target directory of the csv files. This script loads the raw images, and uses the `create_csv.py` script to process the raw data and generate labels, asving into designated variables.
+
+The `create_csv.py` script assigns labels from knowledge of how the raw data is stored. In the directory `data/raw/` there are three subdirectories, `/training_data/`, `/validation_data/`, and `/training_data/`. Within each of these are separate folders for each alphanumeric character (0-9, A-Z). The script walks through the directories, for each image flattens the 28x28 image, converts to type int, and loads into a single data array. Labels are generated based on an iterator to be decoded later.
+
+Ultimately this produces `.csv` files in the `sys.argv[2]` directory.
+
+### Building npy dataset from raw (not recommended)
+
+```bash
+$ ./rawtonpy.sh
+```
+Will run the python script `save_nparray.py`, converting raw images to .npy files with labels. If you want to overwrite current files already present in the `/data/nparr/` directory simply
+```bash
+$ ./rawtonpy.sh overwrite
+```
+
+Where `/data/raw/` is the directory for the raw images, and `/data/nparr/` is the target directory of the npy files. This script loads the raw images, and uses the `create_nparray.py` script toprocess the raw data and generate labels, saving into designated variables.
+
+The `create_nparray.py` script assigns labels from knowledge of how the raw data is stored. In the directory `data/raw/` there are three subdirectories, `/training_data/`, `/validation_data/`, and `/test_data/`. Within each of these are separate folders for each alphanumeric character (0-9, A-Z). The script walks through the directories, applies `cv2.COLOR_BGR2GRAY`, `keras.preprocessing.image.img_to_array`, normalizes between 0 and 1, and then assigns labels depending on an iterator. This iterator is used as a index for a CLASSES list, producing type str values for labels.
 
 Ultimately this produces `.npy` files in the `sys.argv[2]` directory.
 
-### Training and exporting 
+### Training the model
 
-Training the model is simple once the data is in the correct format. Simply,
+Training the model is simple once the data is in the correct format. Simply run the script `model_train.py` which accepts the following flags:
+* either accepts `--train` or `--export`. The former trains the model, the latter exports the model as a .pb.
+* `-e` or `--epoch` followed by an int, specifying the number of epochs to train for. Default 8 (just for testing).
+* `-b` or `--batch` followed by an int, specifying the batch size. Default 32.
+
+eg.
 
 ```
-$ python3 model_train.py --train
+$ python3 model_train.py --train -e 64 -b 64
 ```
+
+
+### Exporting the model
+
+WIP
+
+
 
