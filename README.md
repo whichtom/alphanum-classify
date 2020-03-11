@@ -1,9 +1,17 @@
 <p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/banner.png"/></p>
+
 # UAS Reconnaissance Software
 
 The goal is to develop a system capable of recognition of alphanumeric characters on ground targets, classify, locate with lat/lon, and downlink to a GCS from a UAS.
 
-atm just does image recognition for a dataset of alphanumeric characters.
+Status: just alphanumeric character recognition atm.
+
+## Results
+
+The model trained with the dataset is at 97% test accuracy, using a batch size of 16 for 32 epochs.
+
+<p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/training-val-acc.png" height=240 width=320/></p> <p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/training-val-loss.png" height=240 width=320/></p>
+
 
 ## Usage
 
@@ -39,7 +47,7 @@ The `create_nparray.py` script assigns labels from knowledge of how the raw data
 
 Ultimately this produces `.npy` files in the `sys.argv[2]` directory.
 
-### Training the model
+## Training the model
 
 Training the model is simple once the data is in the correct format. Simply run the script `model_train.py` which accepts the following flags:
 * either accepts `--train` or `--export`. The former trains the model, the latter exports the model as a .pb.
