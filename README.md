@@ -1,3 +1,4 @@
+<p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/banner.png"/></p>
 # UAS Reconnaissance Software
 
 The goal is to develop a system capable of recognition of alphanumeric characters on ground targets, classify, locate with lat/lon, and downlink to a GCS from a UAS.
