@@ -10,7 +10,9 @@ Status: just alphanumeric character recognition atm.
 
 The model trained with the dataset is at 97% test accuracy, using a batch size of 16 for 32 epochs.
 
-<p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/training-val-acc.png" height=240 width=320/></p> <p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/training-val-loss.png" height=240 width=320/></p>
+<p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/training-val-acc.png"/></p>
+<p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/training-val-loss.png" /></p>
+
 
 
 ## Usage
