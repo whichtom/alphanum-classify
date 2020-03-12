@@ -33,7 +33,10 @@ def load_img_from_folder(folderdir):
         img = cv2.imread(os.path.join(folderdir, filename), 0)
         if img is not None:
             imgs.append(img)
-#            if filename == "1415.jpg":
+#            if filename == "53.jpg":
+#                cv2.imwrite("53_gray.jpg", img)
+#            if filename == "yeet_0_3494.jpeg":
+#                cv2.imwrite("53_2_gray.jpg", img)
 #                cv2.imshow("image",img)
 #                cv2.namedWindow("image", cv2.WINDOW_NORMAL)
 #                cv2.resizeWindow("image", 300, 300)
@@ -57,11 +60,11 @@ def img_to_csv(imgdir):
 
     # get number of files in the directory
     if imgdir == "../data/raw/training_data":
-        num_files = 6286
+        num_files = 1280 # 5837 (culled) # 6286
     elif imgdir == "../data/raw/test_data":
-        num_files = 360
+        num_files = 215 # 284 (culled) # 360
     elif imgdir == "../data/raw/validation_data":
-        num_files = 545
+        num_files = 305 # 452 (culled) # 545
 
     data = np.zeros([num_files, 784]) # 28 x 28
     label = np.zeros([num_files])
@@ -84,3 +87,4 @@ def img_to_csv(imgdir):
         p = p+1
 
     return data, label
+
