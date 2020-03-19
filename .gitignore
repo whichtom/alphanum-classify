@@ -5,3 +5,4 @@
 *.npy
 *.csv
 .venv
+/train/*.png
