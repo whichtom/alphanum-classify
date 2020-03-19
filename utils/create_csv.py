@@ -10,6 +10,7 @@ import csv
 import re
 import glob
 
+
 def atoi(text):
     return int(text) if text.isdigit() else text
 
@@ -33,15 +34,6 @@ def load_img_from_folder(folderdir):
         img = cv2.imread(os.path.join(folderdir, filename), 0)
         if img is not None:
             imgs.append(img)
-#            if filename == "53.jpg":
-#                cv2.imwrite("53_gray.jpg", img)
-#            if filename == "yeet_0_3494.jpeg":
-#                cv2.imwrite("53_2_gray.jpg", img)
-#                cv2.imshow("image",img)
-#                cv2.namedWindow("image", cv2.WINDOW_NORMAL)
-#                cv2.resizeWindow("image", 300, 300)
-#
-#                cv2.waitKey(0)
     return imgs
 
 def get_subdir(folderdir):
@@ -60,12 +52,11 @@ def img_to_csv(imgdir):
 
     # get number of files in the directory
     if imgdir == "../data/raw/training_data":
-        num_files = 1280 # 5837 (culled) # 6286
+        num_files = 1280
     elif imgdir == "../data/raw/test_data":
-        num_files = 215 # 284 (culled) # 360
+        num_files = 215
     elif imgdir == "../data/raw/validation_data":
-        num_files = 305 # 452 (culled) # 545
-
+        num_files = 305
     data = np.zeros([num_files, 784]) # 28 x 28
     label = np.zeros([num_files])
 
@@ -79,12 +70,9 @@ def img_to_csv(imgdir):
             # individual img is j
             # individual label is generated for said img
             j = j.flatten() # (28,28) -> (784,)
-            j = j.astype(int) # no long boiz
+            j = j.astype(int)
             data[k, :] = j
-            #data[k, len(j)] = int(p) # last column is index
             label[k] = int(p)
             k = k+1
         p = p+1
-
     return data, label
-
