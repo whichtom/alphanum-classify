@@ -21,7 +21,7 @@ from sklearn.preprocessing import LabelBinarizer
 import matplotlib.pyplot as plt
 import datetime
 
-print("TF: {}".format(tf.__version__))
+print("TENSORFLOW VERSION: {}".format(tf.__version__))
 
 # classes of each output
 classes = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
         # visualization
         model.summary()
-        print("SAVING MODEL ARCHITECTURE AS PNG")
+        print("SAVING MODEL ARCHITECTURE IMAGE TO CURRENT WORKING DIRECTORY AS model_arch.png")
         plot_model(model, to_file="model_arch.png")
 
         # training
@@ -145,19 +145,19 @@ if __name__ == "__main__":
        # testing
         label_pred = model.predict(test_data)
         test_accuracy = accuracy_score(test_labels, label_pred.round())
-        print("Test acurracy 1", test_accuracy)
+        print("TEST ACCURACY (1)", test_accuracy)
 
         predictions = [np.argmax(model.predict(np.expand_dims(tensor, axis=0))) for tensor in test_data]
         test_acc = 100*np.sum(np.array(predictions) == np.argmax(test_labels, axis=1))/len(predictions)
 
-        print("Test accuracy 2", test_acc)
+        print("TEST ACCURACY (2)", test_acc)
         # Save the h5 file
         model.save("{}.h5".format(args.file))
-        print("model saved to current working directory")
+        print("HDF5 MODEL SAVED TO CURRENT WORKING DIRECTORY AS {}.h5".format(args.file))
 
         # matplotlib visualization
         # training and validation accuracy values
-        print("Plotting training and validation accuracy values...")
+        print("PLOTTING TRAINING AND VALIDATION ACCURACY")
         plt.figure(0)
         plt.plot(history.history["accuracy"])
         plt.plot(history.history["val_accuracy"])
@@ -168,7 +168,7 @@ if __name__ == "__main__":
         plt.savefig("training-val-acc.png")
 
         # training and validation loss values
-        print("Plotting training and validation loss values...")
+        print("PLOTTING TRAINING AND VALIDATION LOSS")
         print("="*80)
         plt.figure(1)
         plt.plot(history.history["loss"])
@@ -180,7 +180,7 @@ if __name__ == "__main__":
         plt.savefig("training-val-loss.png")
 
     elif args.export:
-        print("Exporting model...")
+        print("EXPORTING MODEL")
         model = load_model("model.h5")
         session = K.get_session()
 
