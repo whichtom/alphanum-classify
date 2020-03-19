@@ -19,6 +19,9 @@ import argparse
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import LabelBinarizer
 import matplotlib.pyplot as plt
+import datetime
+
+print("TF: {}".format(tf.__version__))
 
 # classes of each output
 classes = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
@@ -87,12 +90,12 @@ if __name__ == "__main__":
     parser.add_argument("--export", action="store_true")
     parser.add_argument("--epoch", "-e", type=int, help="epoch", default=8)
     parser.add_argument("--batch", "-b", type=int, help="batch size", default=32)
+    parser.add_argument("--file", "-f", type=str, help="filename to save model")
     args = parser.parse_args()
 
     if args.train:
         print("="*80)
-        print("Building model...")
-        print("="*80)
+        print("BUILDING MODEL")
         model = Sequential()
         # input: 28x28 images with 1 channel -> (28, 28, 1) tensors.
         # this applies 32 convolution filters of size 3x3 each.
@@ -125,32 +128,31 @@ if __name__ == "__main__":
 
         # visualization
         model.summary()
-        print("="*80)
-        print("Saving model with keras.utils.plot_model...")
-        print("="*80)
+        print("SAVING MODEL ARCHITECTURE AS PNG")
         plot_model(model, to_file="model_arch.png")
 
         # training
-        print("="*80)
-        print("Fitting model...")
-        print("="*80)
+        print("FITTING MODEL")
+
+        log_dir = "logs/fit/{}".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+        tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
         history = model.fit(train_data, train_labels,
                 validation_data=(valid_data, valid_labels),
-                epochs=args.epoch, batch_size=args.batch, verbose=1)
+                epochs=args.epoch, batch_size=args.batch,
+                callbacks=[tensorboard_callback], verbose=1)
 
-        # testing
+       # testing
         label_pred = model.predict(test_data)
         test_accuracy = accuracy_score(test_labels, label_pred.round())
         print("Test acurracy 1", test_accuracy)
-
 
         predictions = [np.argmax(model.predict(np.expand_dims(tensor, axis=0))) for tensor in test_data]
         test_acc = 100*np.sum(np.array(predictions) == np.argmax(test_labels, axis=1))/len(predictions)
 
         print("Test accuracy 2", test_acc)
         # Save the h5 file
-        model.save("model.h5")
-        print("="*80)
+        model.save("{}.h5".format(args.file))
         print("model saved to current working directory")
 
         # matplotlib visualization
