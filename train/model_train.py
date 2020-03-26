@@ -21,17 +21,14 @@ from sklearn.preprocessing import LabelBinarizer
 import matplotlib.pyplot as plt
 import datetime
 
-print("TENSORFLOW VERSION: {}".format(tf.__version__))
-
 # classes of each output
-classes = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+CLASSES = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
             "A", "B", "C", "D", "E", "F", "G", "H", "I",
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
             "T", "U", "V", "W", "X", "Y", "Z"]
 
 WIDTH = 28
 HEIGHT = 28
-DEPTH = 20
 NUM_CLASSES = 36
 INPUT_SHAPE = (WIDTH, HEIGHT, 1)
 
@@ -69,33 +66,19 @@ train_data = train_data.reshape(train_data.shape[0], 28, 28, 1)
 valid_data = valid_data.reshape(valid_data.shape[0], 28, 28, 1)
 test_data = test_data.reshape(test_data.shape[0], 28, 28, 1)
 
-
-save_pb_dir = "."
-
-def freeze_graph(graph, session, output, save_pb_dir=save_pb_dir,
-                save_pb_name="model.pb", save_pb_as_text=False):
-    with graph.as_default():
-        graphdef_inf = tf.graph_util.remove_training_nodes(graph.as_graph_def())
-        graphdef_frozen = tf.graph_util.convert_variables_to_constants(session,
-                                                            graphdef_inf,
-                                                            output)
-        graph_io.write_graph(graphdef_frozen, save_pb_dir, save_pb_name,
-                            as_text=save_pb_as_text)
-        return graphdef_frozen
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--export", action="store_true")
     parser.add_argument("--epoch", "-e", type=int, help="epoch", default=8)
     parser.add_argument("--batch", "-b", type=int, help="batch size", default=32)
-    parser.add_argument("--file", "-f", type=str, help="filename to save model")
+    parser.add_argument("--file", "-f", type=str, help="file name to save model to", default="model")
     args = parser.parse_args()
 
     if args.train:
         print("="*80)
-        print("BUILDING MODEL")
+        print("Building model...")
+        print("="*80)
         model = Sequential()
         # input: 28x28 images with 1 channel -> (28, 28, 1) tensors.
         # this applies 32 convolution filters of size 3x3 each.
@@ -128,36 +111,36 @@ if __name__ == "__main__":
 
         # visualization
         model.summary()
-        print("SAVING MODEL ARCHITECTURE IMAGE TO CURRENT WORKING DIRECTORY AS model_arch.png")
+        print("="*80)
+        print("== Visualization ==")
+        print("Saving model with keras.utils.plot_model as model_arch.png")
         plot_model(model, to_file="model_arch.png")
 
         # training
-        print("FITTING MODEL")
-
-        log_dir = "logs/fit/{}".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-        tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
-
+        print("Fitting model...")
+        print("="*80)
         history = model.fit(train_data, train_labels,
                 validation_data=(valid_data, valid_labels),
-                epochs=args.epoch, batch_size=args.batch,
-                callbacks=[tensorboard_callback], verbose=1)
+                epochs=args.epoch, batch_size=args.batch, verbose=1)
 
-       # testing
+        # testing
         label_pred = model.predict(test_data)
         test_accuracy = accuracy_score(test_labels, label_pred.round())
-        print("TEST ACCURACY (1)", test_accuracy)
+        print("Test acurracy 1", test_accuracy)
+
 
         predictions = [np.argmax(model.predict(np.expand_dims(tensor, axis=0))) for tensor in test_data]
         test_acc = 100*np.sum(np.array(predictions) == np.argmax(test_labels, axis=1))/len(predictions)
 
-        print("TEST ACCURACY (2)", test_acc)
+        print("Test accuracy 2", test_acc)
         # Save the h5 file
-        model.save("{}.h5".format(args.file))
-        print("HDF5 MODEL SAVED TO CURRENT WORKING DIRECTORY AS {}.h5".format(args.file))
+        model.save("model.h5", include_optimizer=False)
+        print("="*80)
+        print("model saved to current working directory")
 
         # matplotlib visualization
         # training and validation accuracy values
-        print("PLOTTING TRAINING AND VALIDATION ACCURACY")
+        print("Plotting training and validation accuracy values...")
         plt.figure(0)
         plt.plot(history.history["accuracy"])
         plt.plot(history.history["val_accuracy"])
@@ -168,7 +151,7 @@ if __name__ == "__main__":
         plt.savefig("training-val-acc.png")
 
         # training and validation loss values
-        print("PLOTTING TRAINING AND VALIDATION LOSS")
+        print("Plotting training and validation loss values...")
         print("="*80)
         plt.figure(1)
         plt.plot(history.history["loss"])
@@ -178,30 +161,3 @@ if __name__ == "__main__":
         plt.xlabel("Epoch")
         plt.legend(["Train", "Test"], loc="upper left")
         plt.savefig("training-val-loss.png")
-
-    elif args.export:
-        print("EXPORTING MODEL")
-        model = load_model("model.h5")
-        session = K.get_session()
-
-        input_names = [t.op.name for t in model.inputs]
-        output_names = [t.op.name for t in model.outputs]
-
-        print(input_names, output_names)
-
-        frozen_graph = freeze_graph(session.graph, session,
-                                    [out.op.name for out in model.outputs],
-                                    save_pb_dir=save_pb_dir)
-        converter = trt.TrtGraphConverter(
-                                input_graph_def=frozen_graph,
-                                max_batch_size=1,
-                                max_workspace_size_bytes=1<<25,
-                                precision_mode="FP16",
-                                minimum_segment_size=50)
-        trt_graph = converter.convert()
-
-        graph_io.write_graph(trt_graph, ".", "model2.pb", as_text=False)
-
-
-    else:
-        print("Either --train or --export")
