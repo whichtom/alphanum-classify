@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/banner.png"/></p>
+<p align="center"><img src="https://raw.githubusercontent.com/whichtom/alphanum-classify/master/assets/banner.png"/></p>
 
 # Alphanumeric character classification
 
@@ -10,7 +10,7 @@ For now this is just character classification.
 
 The model trained with the dataset is at 97% test accuracy, using a batch size of 16 for 64 epochs.
 
-
+<p align="center"><img src="https://raw.githubusercontent.com/whichtom/alphanum-classify/master/assets/accuracy-loss.png"/></p>
 
 ## Requirements
 
