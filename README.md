@@ -2,9 +2,9 @@
 
 # Alphanumeric character classification
 
-The goal is to develop a system capable of recognition of alphanumeric characters on ground targets, classify, locate with lat/lon, and downlink to a GCS from a UAS.
+The goal is to develop a system capable of recognition of alphanumeric characters on ground targets, classify, locate with lat/lon, and downlink to a GCS from a UAS. As such, the alphanumeric characters can be any orientation, and the data is somewhat representitive of this.
 
-For now this is just character classification.
+For now this is just character classification of alphanumeric characters in multiple orientations.
 
 ## Results
 
