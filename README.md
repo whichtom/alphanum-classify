@@ -79,7 +79,7 @@ $ sudo make install
 
 Tensorflow was installed like so.
 ```
-sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v4.3 tensorflow==1.15.0+nv20.01
+$ sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v4.3 tensorflow==1.15.0+nv20.01
 ```
 
 ## Usage
