@@ -135,6 +135,15 @@ $ python3 model_train.py --train -e 64 -b 32 -f model
 
 Might get some accuracy increase with epoch increase, but not tested above 128. Batch of 64 might create memory issues, so 32 or 16 is good.
 
+## Classifying
+
+Run the `classify.py` script with the argument being the .jpg to be classified. For example,
+
+```
+$ python3 classify.py data/raw/test_data/A/449.jpg
+```
+Which returns the predicted alphanumeric character. Supports 28x28 images.
+
 ## To do
 
 The system built does very basic image classification, but it seems I'll need to rebuild the dataset to train an object detection system to better perform the task of reconnaissance. yay.
