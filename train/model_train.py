@@ -69,8 +69,7 @@ test_data = test_data.reshape(test_data.shape[0], 28, 28, 1)
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--train", action="store_true")
-    parser.add_argument("--export", action="store_true")
-    parser.add_argument("--epoch", "-e", type=int, help="epoch", default=8)
+    parser.add_argument("--epoch", "-e", type=int, help="epoch", default=64)
     parser.add_argument("--batch", "-b", type=int, help="batch size", default=32)
     parser.add_argument("--file", "-f", type=str, help="file name to save model to", default="model")
     args = parser.parse_args()
@@ -126,15 +125,10 @@ if __name__ == "__main__":
         # testing
         label_pred = model.predict(test_data)
         test_accuracy = accuracy_score(test_labels, label_pred.round())
-        print("Test acurracy 1", test_accuracy)
+        print("Test acurracy: {}".format(test_accuracy))
 
-
-        predictions = [np.argmax(model.predict(np.expand_dims(tensor, axis=0))) for tensor in test_data]
-        test_acc = 100*np.sum(np.array(predictions) == np.argmax(test_labels, axis=1))/len(predictions)
-
-        print("Test accuracy 2", test_acc)
         # Save the h5 file
-        model.save("model.h5", include_optimizer=False)
+        model.save("{}.h5".format(args.file), include_optimizer=False)
         print("="*80)
         print("model saved to current working directory")
 

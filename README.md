@@ -1,10 +1,10 @@
 <p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/banner.png"/></p>
 
-# UAS Reconnaissance Software
+# Alphanumeric character classification
 
 The goal is to develop a system capable of recognition of alphanumeric characters on ground targets, classify, locate with lat/lon, and downlink to a GCS from a UAS.
 
-Status: just alphanumeric character recognition atm.
+For now this is just character classification.
 
 ## Results
 
@@ -13,7 +13,75 @@ The model trained with the dataset is at 97% test accuracy, using a batch size o
 <p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/training-val-acc.png"/></p>
 <p align="center"><img src="https://raw.githubusercontent.com/whichtom/reconnaissance/master/assets/training-val-loss.png" /></p>
 
+## Requirements
 
+These have been tested on a NVIDIA Jetson Nano JetPack 4.3 - L4T R32.3.1
+
+* Ubutu 18.04.4 LTS
+* opencv
+* tensorflow 1.15.0
+* keras
+* sklearn
+* matplotlib
+* numpy
+
+For the Jetson Nano, sklearn was installed through apt-get, most else through pip. OpenCV was built from source like so.
+
+```
+$ dependencies=(build-essential
+              cmake
+              pkg-config
+              libavcodec-dev
+              libavformat-dev
+              libswscale-dev
+              libv4l-dev
+              libxvidcore-dev
+              libavresample-dev
+              python3-dev
+              libtbb2
+              libtbb-dev
+              libtiff-dev
+              libjpeg-dev
+              libpng-dev
+              libtiff-dev
+              libdc1394-22-dev
+              libgtk-3-dev
+              libcanberra-gtk3-module
+              libatlas-base-dev
+              gfortran
+              wget
+              unzip)
+$ sudo apt install -y ${dependencies[@]}
+$ wget https://github.com/opencv/opencv/archive/4.2.0.zip -O opencv-4.2.0.zip
+$ wget https://github.com/opencv/opencv_contrib/archive/4.2.0.zip -O opencv_contrib-4.2.0.zip
+$ unzip opencv-4.2.0.zip 
+$ unzip opencv_contrib-4.2.0.zip
+$ mkdir opencv-4.2.0/build 
+$ cd opencv-4.2.0/build
+$ cmake -D CMAKE_BUILD_TYPE=RELEASE \
+      -D WITH_CUDA=ON \
+      -D CUDA_ARCH_PTX="" \
+      -D CUDA_ARCH_BIN="5.3,6.2,7.2" \
+      -D WITH_CUBLAS=ON \
+      -D WITH_LIBV4L=ON \
+      -D BUILD_opencv_python3=ON \
+      -D BUILD_opencv_python2=OFF \
+      -D BUILD_opencv_java=OFF \
+      -D WITH_GSTREAMER=OFF \
+      -D WITH_GTK=ON \
+      -D BUILD_TESTS=OFF \
+      -D BUILD_PERF_TESTS=OFF \
+      -D BUILD_EXAMPLES=OFF \
+      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.2.0/modules \
+      ..
+$ make -j4
+$ sudo make install
+``` 
+
+Tensorflow was installed like so.
+```
+sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v4.3 tensorflow==1.15.0+nv20.01
+```
 
 ## Usage
 
@@ -49,23 +117,24 @@ The `create_nparray.py` script assigns labels from knowledge of how the raw data
 
 Ultimately this produces `.npy` files in the `sys.argv[2]` directory.
 
+I didn't manage to achieve very high accuracy using .npy, so maybe something weird was happening to the data. 
+
 ## Training the model
 
-Training the model is simple once the data is in the correct format. Simply run the script `model_train.py` which accepts the following flags:
-* either accepts `--train` or `--export`. The former trains the model, the latter exports the model as a .pb.
-* `-e` or `--epoch` followed by an int, specifying the number of epochs to train for. Default 8 (just for testing).
+Training the model is simple once the data is in the correct format. Run the script `model_train.py --train` in the train directory with the flags:
+* `--train` trains the model
+* `-e` or `--epoch` followed by an int, specifying the number of epochs to train for. Default 64
 * `-b` or `--batch` followed by an int, specifying the batch size. Default 32.
+* `-f` or `--file` followed by a str, specifying the file name that the model will be saved to as a .h5, without optimizer (to fix memory leaking). Default "model".
 
-eg.
+Recommended running arguments are:
 
 ```
-$ python3 model_train.py --train -e 64 -b 64
+$ python3 model_train.py --train -e 64 -b 32 -f model
 ```
 
+Might get some accuracy increase with epoch increase, but not tested above 128. Batch of 64 might create memory issues, so 32 or 16 is good.
 
-### Exporting the model
+## To do
 
-WIP
-
-
-
+The system built does very basic image classification, but it seems I'll need to rebuild the dataset to train an object detection system to better perform the task of reconnaissance. yay.
