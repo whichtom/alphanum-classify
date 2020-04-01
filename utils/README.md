@@ -1,4 +1,4 @@
-# Scripts for image preprocessing
+# Scripts for data setup
 
 ## csv exporting
 
@@ -20,8 +20,8 @@
 
 `search.sh <directory>` finds the sum of the files in a directory. Specifically, for checking whether the number of labels produced matches the number of images present.
 
-* for `training_data/`, `./search.sh ../data/raw/training_data`: 6286 images
-* for `test_data/`: 360 images
-* for `valiation_data/`: 545 images
+* for `training_data/`, `./search.sh ../data/raw/training_data`: 1280 images
+* for `test_data/`: 215 images
+* for `valiation_data/`: 305 images
 
 `excheck.sh` finds if there are any non-jpeg or non-jpg files present in the directories. Seemed like I had some strays.
