@@ -84,6 +84,27 @@ $ sudo pip3 install --extra-index-url https://developer.download.nvidia.com/comp
 
 ## Usage
 
+### Extracting dataset
+
+Navigate to the data directory,
+```
+$ mkdir raw
+$ cd raw
+$ unzip ../extract_into_raw.zip
+```
+
+From the utils directory, run
+```
+$ ./search.sh ../data/raw/training_data
+1280
+$ ./search.sh ../data/raw/test_data
+215
+$ ./search.sh ../data/raw/validation_data
+305
+```
+Just to verify there are the correct number of images in the correct files.
+
+
 ### Building csv dataset from raw
 
 ```bash
@@ -144,5 +165,7 @@ $ python3 classify.py data/raw/test_data/A/449.jpg
 Which returns the predicted alphanumeric character. Supports 28x28 images.
 
 ## To do
+
+More images should be used to train/test/val the model but its fine as-is. Should expand on it, add more transformations, etc. in the future.
 
 The system built does very basic image classification, but it seems I'll need to rebuild the dataset to train an object detection system to better perform the task of reconnaissance. yay.
