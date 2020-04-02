@@ -166,6 +166,6 @@ Which returns the predicted alphanumeric character. Supports 28x28 images.
 
 ## To do
 
-More images should be used to train/test/val the model but its fine as-is. Should expand on it, add more transformations, etc. in the future.
+More images should be used to train/test/val the model but I just didnt want to spend a million years building a dataset. Should expand on it, add more transformations, etc. in the future.
 
 The system built does very basic image classification, but it seems I'll need to rebuild the dataset to train an object detection system to better perform the task of reconnaissance. yay.
