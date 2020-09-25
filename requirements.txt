@@ -1,5 +1,5 @@
 opencv-python
 keras
-tensorflow==1.15.2
+tensorflow>=1.15.4
 numpy
 scikit-learn
